@@ -1,29 +1,34 @@
-var initialState = [
-  {
-    id: 1,
-    name: "Spring mvc",
-    price: 3423,
-    status: true,
-  }, {
-    id: 2,
-    name: "Codeigniter",
-    price: 532,
-    status: true,
-  }, {
-    id: 3,
-    name: "Nodejs",
-    price: 654,
-    status: false,
-  }, {
-    id: 4,
-    name: "React",
-    price: 3443,
-    status: false,
-  }
-];
+import * as Types from "../constants/ActionTypes";
+var initialState = [];
+
+var findIndex = (products, id) => {
+  var result = -1;
+  products.forEach((products, index) => {
+    if (products.id === id) {
+      result = index;
+    }
+  });
+  return result;
+}
 
 const products = (state = initialState, action) => {
+  var index = -1;
+  
   switch(action.type) {
+    case Types.FETCH_PRODUCTS:
+      state = action.products;
+      return [...state];
+    case Types.DELETE_PRODUCT:
+      index = findIndex(state, action.id);
+      state.splice(index, 1);
+      return [...state];
+    case Types.ADD_PRODUCT:
+      state.push(action.product);
+      return [...state];
+    case Types.UPDATE_PRODUCT:
+      index = findIndex(state, action.product.id);
+      state[index] = action.product;
+      return [...state];
     default: return [...state];
   }
 };
